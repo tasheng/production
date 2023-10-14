@@ -134,42 +134,44 @@ process.load("HeavyIonsAnalysis.TrackAnalysis.TrackAnalyzers_cff")
 
 # ZDC RecHit Producer
 #CM Edit turn off the ZDC
-#process.load('HeavyIonsAnalysis.ZDCAnalysis.QWZDC2018Producer_cfi')
-#process.load('HeavyIonsAnalysis.ZDCAnalysis.QWZDC2018RecHit_cfi')
-#process.load('HeavyIonsAnalysis.ZDCAnalysis.zdcanalyzer_cfi')
+process.load('HeavyIonsAnalysis.ZDCAnalysis.QWZDC2018Producer_cfi')
+process.load('HeavyIonsAnalysis.ZDCAnalysis.QWZDC2018RecHit_cfi')
+process.load('HeavyIonsAnalysis.ZDCAnalysis.zdcanalyzer_cfi')
 
-#process.zdcanalyzer.doZDCRecHit = False
-#process.zdcanalyzer.doZDCDigi = True
-#process.zdcanalyzer.zdcRecHitSrc = cms.InputTag("QWzdcreco")
-#process.zdcanalyzer.zdcDigiSrc = cms.InputTag("hcalDigis", "ZDC")
-#process.zdcanalyzer.calZDCDigi = False
-#process.zdcanalyzer.verbose = False
-#
-#from CondCore.CondDB.CondDB_cfi import *
-#process.es_pool = cms.ESSource("PoolDBESSource",
-#    timetype = cms.string('runnumber'),
-#    toGet = cms.VPSet(
-#        cms.PSet(
-#            record = cms.string("HcalElectronicsMapRcd"),
-#            tag = cms.string("HcalElectronicsMap_2021_v2.0_data")
-#        )
-#    ),
-#    connect = cms.string('frontier://FrontierProd/CMS_CONDITIONS'),
-#        authenticationMethod = cms.untracked.uint32(1)
-#    )
-#
-#process.es_prefer = cms.ESPrefer('HcalTextCalibrations', 'es_ascii')
-#process.es_ascii = cms.ESSource(
-#    'HcalTextCalibrations',
-#    input = cms.VPSet(
-#        cms.PSet(
-#
-#            object = cms.string('ElectronicsMap'),
-#            file = cms.FileInPath("HeavyIonsAnalysis/Configuration/test/emap_2023_newZDC_v3.txt")
-#
-#             )
-#        )
-#    )
+process.zdcdigi.SOI = cms.untracked.int32(2)
+process.zdcanalyzer.doZDCRecHit = False
+process.zdcanalyzer.doZDCDigi = True
+process.zdcanalyzer.zdcRecHitSrc = cms.InputTag("QWzdcreco")
+process.zdcanalyzer.zdcDigiSrc = cms.InputTag("hcalDigis", "ZDC")
+process.zdcanalyzer.calZDCDigi = False
+process.zdcanalyzer.verbose = False
+process.zdcanalyzer.nZdcTs = cms.int32(6)
+
+from CondCore.CondDB.CondDB_cfi import *
+process.es_pool = cms.ESSource("PoolDBESSource",
+    timetype = cms.string('runnumber'),
+    toGet = cms.VPSet(
+        cms.PSet(
+            record = cms.string("HcalElectronicsMapRcd"),
+            tag = cms.string("HcalElectronicsMap_2021_v2.0_data")
+        )
+    ),
+    connect = cms.string('frontier://FrontierProd/CMS_CONDITIONS'),
+        authenticationMethod = cms.untracked.uint32(1)
+    )
+
+process.es_prefer = cms.ESPrefer('HcalTextCalibrations', 'es_ascii')
+process.es_ascii = cms.ESSource(
+    'HcalTextCalibrations',
+    input = cms.VPSet(
+        cms.PSet(
+
+            object = cms.string('ElectronicsMap'),
+            file = cms.FileInPath("emap_2023_newZDC_v3.txt")
+
+             )
+        )
+    )
 #CM Edit end turn off ZDC
 
 ###############################################################################
@@ -185,12 +187,12 @@ process.forest = cms.Path(
     process.hltAK4CaloAbsoluteCorrector +
     process.hltAK4CaloCorrector +
     process.hltAK4CaloJetsCorrected +
-    process.ak4CaloJetAnalyzer
+    process.ak4CaloJetAnalyzer +
     #process.particleFlowAnalyser +
 #    process.ggHiNtuplizer +
     #process.zdcdigi +
     #process.QWzdcreco +
-#    process.zdcanalyzer +
+    process.zdcanalyzer
 #    process.unpackedMuons +
 #    process.muonAnalyzer
     )
